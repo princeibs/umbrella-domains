@@ -23,7 +23,7 @@ contract ENS is ERC721URIStorage {
         string solanaAddress;        
     }
 
-    address payable immutable owner;
+    address payable public immutable owner;
 
     // tld = Top Level Domain (e.g .crypto, .eth)
     // tld => name => address
@@ -39,7 +39,7 @@ contract ENS is ERC721URIStorage {
     error Unauthorized();
     /// `sent` - amount sent by user
     /// `expected` - expected amount to send
-    error InvalidFunds(uint sent, uint expected);
+    error InvalidFunds(uint expected, uint sent);
     error InvalidName(string name);
 
     modifier onlyOwner() {
@@ -51,7 +51,7 @@ contract ENS is ERC721URIStorage {
        owner = payable(msg.sender);
     }
 
-    function cost(string calldata name) public pure returns (uint) {
+    function cost(string calldata name) private pure returns (uint) {
         uint len = StringUtils.strlen(name);
         require(len > 0);
         if (len == 2) {
@@ -65,14 +65,14 @@ contract ENS is ERC721URIStorage {
         }
     }  
 
-    function validName(string calldata name) public pure returns (bool) {
+    function validName(string calldata name) private pure returns (bool) {
         return StringUtils.strlen(name) >= 2 && StringUtils.strlen(name) <= 32;
     }
 
-    function setName(string calldata _name, string calldata _tld) public payable {
+    function setName(string calldata _name, string calldata _tld) external payable {
         uint nameCost = cost(_name);   
         if (!validName(_name)) revert InvalidName(_name);
-        if (msg.value < nameCost) revert InvalidFunds(msg.value, nameCost);
+        if (msg.value < nameCost) revert InvalidFunds(nameCost, msg.value);
         if (register[_tld][_name] != address(0)) revert NameAlreadyExists(); 
         
         string memory text = string(abi.encodePacked(_name,".",_tld));
@@ -87,7 +87,7 @@ contract ENS is ERC721URIStorage {
                 '{',
                     '"name": "', string.concat(_name, ".", _tld), '",',
                     '"description": "Umbrella Name Service",',
-                    '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(finalSvg)), '",',                    
+                    '"image": "data:image/svg+xml;base64,', Base64.encode(bytes(finalSvg)), '"',                    
                 '}'
             )
         );
@@ -95,7 +95,7 @@ contract ENS is ERC721URIStorage {
         string memory tokenUri = string(abi.encodePacked("data:application/json;base64,", json));
 
         console.log("\n--------------------------------------------------------");
-        console.log("Final tokenURI", tokenUri);
+        console.log("Final tokenURI\n", tokenUri);
         console.log("--------------------------------------------------------\n");
 
         _safeMint(msg.sender, tokenId);
@@ -108,14 +108,14 @@ contract ENS is ERC721URIStorage {
         emit RegisterName(string.concat(_name, ".", _tld), msg.sender);
     }
 
-    function setData(string calldata _name, string calldata _tld, Name calldata _newData) public {
+    function setData(string calldata _name, string calldata _tld, Name calldata _newData) external {
         if (register[_tld][_name] != msg.sender) revert Unauthorized();
         data[msg.sender] = _newData;
 
         emit UpdateData(string.concat(_name, ".", _tld));
     } 
 
-    function withdraw() public payable onlyOwner {
+    function withdraw() external payable onlyOwner {
         uint bal = address(this).balance;
         payable(msg.sender).transfer(bal);
     }      
