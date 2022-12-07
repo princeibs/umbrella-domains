@@ -7,6 +7,7 @@
 
 # testing
 /coverage
+/scripts/run.js
 
 # production
 /build
@@ -44,4 +45,4 @@ typechain-types
 # Hardhat files
 cache
 artifacts
-
+bin
