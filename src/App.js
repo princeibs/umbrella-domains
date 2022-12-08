@@ -1,20 +1,26 @@
 import React, {useState, useEffect} from 'react';
+import { ethers } from 'ethers';
 import {
   ChakraProvider,
   theme,
   Flex,
   Text,
   Button,
-  Input,
-  Select,
   Box,
-  Link
+  Link,
+  Input,
+  Select
 } from '@chakra-ui/react';
 import {FiHelpCircle} from "react-icons/fi"
 import {FaWallet} from "react-icons/fa"
 import {CgProfile} from "react-icons/cg"
 import {AiOutlineFire} from "react-icons/ai"
 import {GrOverview} from "react-icons/gr"
+
+import { set } from './utils/actions';
+import ADDRESS from "./contracts/ENS-address.json";
+import ABI from "./contracts/ENS.json";
+
 
 const MUMBAI_CHAIN_ID = "0x13881";
 
@@ -26,8 +32,8 @@ function StyledText({t}) {
       fontSize="20px"
       fontWeight={"700"}
       mx="10px"
-      color={"white"}
-      backgroundColor="gray"
+      color={"black"}
+      backgroundColor="gray.200"
       borderRadius={"8px"}
       p="3px 10px"
     >{t}</Text>
@@ -35,9 +41,12 @@ function StyledText({t}) {
 }
 
 function App() {
-
   const [account, setAccount] = useState(null)
   const [chainId, setChainId] = useState(null)
+  const [domain, setDomain] = useState("")
+  const [tld, setTld] = useState("eth")
+  const [names, setNames] = useState([])
+  const [nameAvailable, setNameAvailable] = useState(false)  
 
   const switchNetwork = async () => {
 		if (window.ethereum) {
@@ -111,9 +120,52 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    checkWalletStatus();
+  const mintName = async () => {
+    const {ethereum} = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);            
+      const tx = await set(contract, domain, tld);
+      loadNames()
+      console.log("tx: ", tx)
+    }    
+  }
+
+  const loadNames = async () => {
+    const {ethereum} = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
+      const tx = await contract.getNames();
+      setNames(tx)
+      // console.log("tx: ", tx)
+    } 
+  }
+
+  const nameStatus = () => {
+    const domainName = domain + "." + tld;    
+    if (names.includes(domainName)) {
+      setNameAvailable(false)
+    } else {
+      setNameAvailable(true)
+    }
+  }
+
+  useEffect(() => {     
+    checkWalletStatus(); 
   }, [])
+
+  useEffect(() => {
+    if (account && chainId === MUMBAI_CHAIN_ID) {
+      loadNames()
+    }
+  }, [account, chainId])
+
+  useEffect(() => {
+    nameStatus();
+  }, [domain, tld]);
 
   // useEffect(() => {
 
@@ -156,27 +208,31 @@ function App() {
             <Text textAlign={"center"} fontSize="25px">Forever yours!</Text>
           </Flex>
           <Flex w="50%" align={"center"} justify="center" direction={"column"}>
+            {/* <InputArea/> */}
             <Flex direction={"column"}>
               <Text fontSize={"25px"} mb="10px">Search or create domain names here</Text>
               <Flex>
-                <Input size="lg" w={"350px"} fontWeight="600" letterSpacing={"3px"} fontSize={"20px"} />                
-                <Select size="lg" width={"150px"} fontWeight="700">
-                  <option value='option1'>.eth</option>
-                  <option value='option2'>.crypto</option>
-                  <option value='option3'>.nft</option>
-                  <option value='option1'>.gm</option>
-                  <option value='option2'>.wagmi</option>
-                  <option value='option3'>.umbrella</option>
-                </Select>
+                  <Input onChange={e => setDomain(e.target.value)} size="lg" w={"350px"} fontWeight="600" letterSpacing={"3px"} fontSize={"20px"} />                
+                  <Select onChange={e => setTld(e.target.value)} size="lg" width={"150px"} fontWeight="700">
+                      <option value='eth'>.eth</option>
+                      <option value='crypto'>.crypto</option>
+                      <option value='nft'>.nft</option>
+                      <option value='gm'>.gm</option>
+                      <option value='wagmi'>.wagmi</option>
+                      <option value='umbrella'>.umbrella</option>
+                  </Select>
               </Flex>   
-              <Text color={"green"}>Available</Text>
-              {/* <Text color={"red"}>Unavailable</Text>            */}
+              {(nameAvailable && domain.length > 1) && <Text color={"green"} mt="5px">
+                <Text color={'green'} bgColor="gray.300" borderRadius="5px" mr={"5px"} fontFamily={"Source Code Pro, monospace"} p="1px 5px" display="inline">{domain+"."+tld}</Text>
+                is available</Text>}
+              {(!nameAvailable && domain.length > 1) && <Text color={"red"} mt="5px">
+              <Text color={'red'} bgColor="gray.300" borderRadius="5px" mr={"5px"} fontFamily={"Source Code Pro, monospace"} p="1px 5px" display="inline">{domain+"."+tld}</Text>
+              is not available</Text>}                            
             </Flex>
-            <Button leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"}>Mint</Button>           
-            <Button leftIcon={<GrOverview/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"}>View</Button> 
+            {nameAvailable && <Button disabled={domain.length<2} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
+            {!nameAvailable && <Button disabled={domain.length<2}  leftIcon={<GrOverview/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"}>View</Button> }                            
           </Flex>
         </Flex>
-
       </Flex>
     </ChakraProvider>
   );

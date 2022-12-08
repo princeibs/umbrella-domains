@@ -54,13 +54,13 @@ contract ENS is ERC721URIStorage {
         uint len = StringUtils.strlen(name);
         require(len > 0);
         if (len == 2) {
-            return 10 * 10**17; // 1 ether
+            return 10 * 10**16; // .1 ether
         } else if (len == 3) {
-            return 5 * 10**17; // .5 ether
+            return 5 * 10**16; // .05 ether
         } else if (len == 4) {
-            return 3 * 10**17; // .3 ether
+            return 3 * 10**16; // .03 ether
         } else {
-            return 1 * 10**17; // .1 ether
+            return 1 * 10**16; // .01 ether
         }
     }  
 
@@ -116,6 +116,11 @@ contract ENS is ERC721URIStorage {
     function withdraw() external payable onlyOwner {
         uint bal = address(this).balance;
         payable(msg.sender).transfer(bal);
-    }      
+    }  
+
+    function getNames() external view returns (string[] memory) {
+        string[] memory _names = names;
+        return _names;
+    }
 
 }
