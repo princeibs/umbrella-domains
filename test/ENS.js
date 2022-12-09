@@ -56,8 +56,8 @@ describe("ENS", function() {
         it("Should revert if supplied with invalid funds", async function() {
             const {ens, acc1} = await loadFixture(deployFixture);            
 
-            const actual  = ens.connect(acc1).setName(NAME, TLD, {value: ethers.utils.parseEther('0.01')})
-            await expect(actual).be.revertedWithCustomError(ens, "InvalidFunds").withArgs(ethers.utils.parseEther('0.1'), ethers.utils.parseEther('0.01'))
+            const actual  = ens.connect(acc1).setName(NAME, TLD, {value: ethers.utils.parseEther('0.001')})
+            await expect(actual).be.revertedWithCustomError(ens, "InvalidFunds").withArgs(ethers.utils.parseEther('0.01'), ethers.utils.parseEther('0.001'))
         })
         it("Should revert with name already exists when supplied with a name already existing", async function() {
             const {ens, acc1} = await loadFixture(deployFixture);

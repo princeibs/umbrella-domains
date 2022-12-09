@@ -11,18 +11,27 @@ import {
   Input,
   Select
 } from '@chakra-ui/react';
-import {FiHelpCircle} from "react-icons/fi"
 import {FaWallet} from "react-icons/fa"
-import {CgProfile} from "react-icons/cg"
 import {AiOutlineFire} from "react-icons/ai"
 import {GrOverview} from "react-icons/gr"
 
-import { set } from './utils/actions';
+import { set, update } from './utils/actions';
 import ADDRESS from "./contracts/ENS-address.json";
 import ABI from "./contracts/ENS.json";
+import HelpModal from './components/HelpModal';
+import MyDomain from './components/MyDomain';
+import ViewModal from './components/ViewModal';
 
 
 const MUMBAI_CHAIN_ID = "0x13881";
+const DATA = ["0xethAddress", "bTCadDress", "0xLtcAddress", "0xBNBADDRESS", "0xSoLaNaADdReSs"]
+// const DATA = {
+//   ethAddress: "0xethAddress",
+//   btcAddress: "bTCadDress",
+//   ltcAddress: "0xLtcAddress",
+//   bnbAddress: "0xBNBADDRESS",
+//   solanaAddress: "0xSoLaNaADdReSs"
+// }
 
 function StyledText({t}) {
   return (
@@ -47,6 +56,7 @@ function App() {
   const [tld, setTld] = useState("eth")
   const [names, setNames] = useState([])
   const [nameAvailable, setNameAvailable] = useState(false)  
+  const [loading, setLoading] = useState(false)  
 
   const switchNetwork = async () => {
 		if (window.ethereum) {
@@ -132,16 +142,58 @@ function App() {
     }    
   }
 
-  const loadNames = async () => {
+  const updateData = async (data) => {
     const {ethereum} = window;
     if (ethereum) {
+      setLoading(true)
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);            
+      const tx = await update(contract, domain, tld, data);    
+      // console.log("tx: ", tx) 
+      setLoading(false)
+    } 
+  }
+
+  const loadNames = async () => {
+    const {ethereum} = window;
+    if (ethereum) {      
       const provider = new ethers.providers.Web3Provider(ethereum)
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
       const tx = await contract.getNames();
+      // console.log("names: ", tx)
       setNames(tx)
-      // console.log("tx: ", tx)
     } 
+  }
+
+  // name + tld = domainName
+  const getDomain = async (domainName) => {
+    const {ethereum} = window;
+    if (ethereum) {
+      setLoading(true)
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
+      const tx = await contract.data(domainName);
+
+      setLoading(false)      
+      return tx;
+    } 
+  }
+
+  const domainOwner = async (name, tld) => {
+    const {ethereum} = window;
+    if (ethereum) {
+      setLoading(true)
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
+      const tx = await contract.register(tld, name); 
+
+      setLoading(false)
+      return tx;
+    }
   }
 
   const nameStatus = () => {
@@ -183,9 +235,9 @@ function App() {
           <Flex h="100px" w="100px">
             <Text fontFamily={"Diplomata SC, cursive"} fontSize="50px">UD</Text>
           </Flex>            
-          <Flex justify={"space-around"} align="center" w="700px" h="80px">
-            <Button leftIcon={<CgProfile/>}>My Domain</Button>
-            <Button leftIcon={<FiHelpCircle/>}>Help</Button>
+          <Flex justify={"space-around"} align="center" w="700px" h="80px">            
+            <MyDomain />
+            <HelpModal/>
             {!account && <Button leftIcon={<FaWallet/>} onClick={connectWallet}>Connect</Button>}
             {account && <Button color={"white"} backgroundColor="green" leftIcon={<FaWallet/>}>{account.slice(0, 5)}...{account.slice(-4)}</Button>}          
           </Flex>
@@ -227,10 +279,10 @@ function App() {
                 is available</Text>}
               {(!nameAvailable && domain.length > 1) && <Text color={"red"} mt="5px">
               <Text color={'red'} bgColor="gray.300" borderRadius="5px" mr={"5px"} fontFamily={"Source Code Pro, monospace"} p="1px 5px" display="inline">{domain+"."+tld}</Text>
-              is not available</Text>}                            
+              is already taken</Text>}                           
             </Flex>
             {nameAvailable && <Button disabled={domain.length<2} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
-            {!nameAvailable && <Button disabled={domain.length<2}  leftIcon={<GrOverview/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"}>View</Button> }                            
+            {!nameAvailable && <ViewModal domain={domain} tld={tld} text="view" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account}/>}            
           </Flex>
         </Flex>
       </Flex>

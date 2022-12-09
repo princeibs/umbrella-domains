@@ -19,3 +19,14 @@ export const set = async (contract, name, tld) => {
     }    
 }
 
+
+export const update = async (contract, domain, tld, data) => {
+    try {
+        let tx = await contract.setData(domain, tld, data)
+        tx = tx.wait();
+        return tx;
+    } catch (e) {
+        console.log(e)
+    }
+
+}

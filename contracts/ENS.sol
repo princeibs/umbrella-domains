@@ -29,6 +29,7 @@ contract ENS is ERC721URIStorage {
     mapping(string => mapping(string => address)) public register;
     mapping(string => uint) public tldCount;
     mapping(string => Name) public data;
+    mapping(string => uint) public nameToIds;
     string[] public names;
 
     event RegisterName(string name, address indexed owner);
@@ -94,8 +95,10 @@ contract ENS is ERC721URIStorage {
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenUri);         
 
+        string memory domain = string.concat(_name, ".", _tld);
         register[_tld][_name] = msg.sender;        
-        names.push(string.concat(_name, ".", _tld));
+        names.push(domain);
+        nameToIds[domain] = tokenId;
         tldCount[_tld]++;
 
         emit RegisterName(string.concat(_name, ".", _tld), msg.sender);
@@ -121,6 +124,11 @@ contract ENS is ERC721URIStorage {
     function getNames() external view returns (string[] memory) {
         string[] memory _names = names;
         return _names;
+    }
+
+    function getTokenUri(string calldata domain) external view returns (string memory uri) {
+        uint tokenId = nameToIds[domain];
+        return tokenURI(tokenId);
     }
 
 }
