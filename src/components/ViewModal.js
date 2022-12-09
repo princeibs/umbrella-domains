@@ -24,7 +24,7 @@ const OverlayOne = () => (
   />
 )
 
-function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, domainOwner, account}) {
+function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, domainOwner, account, toast}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [overlay, setOverlay] = useState(<OverlayOne />)
     const [data, setData] = useState(null) // 
@@ -101,7 +101,8 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                   setEditing(false);
                   setRejectData(bufferData)
                   setData(bufferData)
-                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                  await updateData(Object.values(bufferData))
+                  toast("Successfully updated Ethereum (ETH) address")}}>Save</Button>}
                 {editing && <Button height="35px" onClick={() => {setEditing(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
               </Flex>   
 
@@ -115,7 +116,8 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                   setEditingBtc(false);
                   setRejectData(bufferData)
                   setData(bufferData)
-                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                  await updateData(Object.values(bufferData))
+                  toast("Successfully updated Bitcoin (BTC) address")}}>Save</Button>}
                 {editingBtc && <Button height="35px" onClick={() => {setEditingBtc(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
               </Flex>    
 
@@ -129,7 +131,8 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                   setEditingBnb(false);
                   setRejectData(bufferData)
                   setData(bufferData)
-                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                  await updateData(Object.values(bufferData))
+                  toast("Successfully updated BNB address")}}>Save</Button>}
                 {editingBnb && <Button height="35px" onClick={() => {setEditingBnb(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
               </Flex> 
 
@@ -143,7 +146,8 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                   setEditingLtc(false);
                   setRejectData(bufferData)
                   setData(bufferData)
-                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                  await updateData(Object.values(bufferData))
+                  toast("Successfully updated Litecoin (LTC) address")}}>Save</Button>}
                 {editingLtc && <Button height="35px" onClick={() => {setEditingLtc(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
               </Flex>  
 
@@ -157,7 +161,8 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                   setEditingSol(false);
                   setRejectData(bufferData)
                   setData(bufferData)
-                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                  await updateData(Object.values(bufferData))
+                  toast("Successfully updated Solana (SOL) address")}}>Save</Button>}
                 {editingSol && <Button height="35px" onClick={() => {setEditingSol(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
               </Flex>         
 

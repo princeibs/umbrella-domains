@@ -9,7 +9,8 @@ import {
   Box,
   Link,
   Input,
-  Select
+  Select,
+  useToast
 } from '@chakra-ui/react';
 import {FaWallet} from "react-icons/fa"
 import {AiOutlineFire} from "react-icons/ai"
@@ -49,6 +50,19 @@ function App() {
   const [names, setNames] = useState([])
   const [nameAvailable, setNameAvailable] = useState(false)  
   const [loading, setLoading] = useState(false)  
+
+  const toast = useToast();
+
+  function showToast(message) {
+    toast({
+      position: "top-right",
+      render: () => (
+        <Box bgColor={"green.700"} color="white" p="10px" borderRadius={"5px"} fontWeight="600" borderColor={"orange"} borderWidth="2px" minHeight={"100px"} w="350px">
+          {message}
+        </Box>
+      )
+    });
+  }
 
   const switchNetwork = async () => {
 		if (window.ethereum) {
@@ -129,6 +143,7 @@ function App() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);            
       const tx = await set(contract, domain, tld);
+      showToast(`Successfully claimed '${domain}.${tld}' on the blockchain`)
       loadNames()
       console.log("tx: ", tx)
     }    
@@ -170,23 +185,9 @@ function App() {
       const data = await contract.data(domainName);
       const tokenUri = await contract.getTokenUri(domainName);
 
-      setLoading(false)      
+      setLoading(false)    
+      // showToast("Fetch details successful")  
       return {data, tokenUri};
-    } 
-  }
-
-  const fetchTokenUri = async (domainName) => {
-    const {ethereum} = window;
-    if (ethereum) {
-      setLoading(true)
-      const provider = new ethers.providers.Web3Provider(ethereum)
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
-      const tx = await contract.getTokenUri(domainName);
-
-      console.log("tokenUri: ", tx)
-      setLoading(false)      
-      return tx;
     } 
   }
 
@@ -290,7 +291,7 @@ function App() {
               is already taken</Text>}                           
             </Flex>
             {nameAvailable && <Button disabled={domain.length<2} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
-            {!nameAvailable && <ViewModal domain={domain} tld={tld} text="view" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account}/>}            
+            {!nameAvailable && <ViewModal domain={domain} tld={tld} text="view" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account} toast={showToast}/>}            
           </Flex>
         </Flex>
       </Flex>
