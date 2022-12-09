@@ -24,14 +24,6 @@ import ViewModal from './components/ViewModal';
 
 
 const MUMBAI_CHAIN_ID = "0x13881";
-const DATA = ["0xethAddress", "bTCadDress", "0xLtcAddress", "0xBNBADDRESS", "0xSoLaNaADdReSs"]
-// const DATA = {
-//   ethAddress: "0xethAddress",
-//   btcAddress: "bTCadDress",
-//   ltcAddress: "0xLtcAddress",
-//   bnbAddress: "0xBNBADDRESS",
-//   solanaAddress: "0xSoLaNaADdReSs"
-// }
 
 function StyledText({t}) {
   return (

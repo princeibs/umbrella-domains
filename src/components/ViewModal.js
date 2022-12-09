@@ -109,6 +109,48 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                 {editingBtc && <Button height="35px" onClick={() => {setEditingBtc(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
               </Flex>    
 
+              {/* BNB Address field */}
+              <Flex m="15px 0" align={"center"}>
+                <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>BNB:</Text>
+                {!editingBnb && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.bnbAddress? data.bnbAddress : "Not set"}</Text>}
+                {editingBnb && <Input autoFocus onChange={e => handleEditData("bnbAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
+                {(!editingBnb && isOwner) && <GrEdit onClick={() => setEditingBnb(true)} fontSize={"16px"} cursor="pointer"/>}
+                {editingBnb && <Button mx={"4px"} height="35px" disabled={!bufferData?.bnbAddress?.length} onClick={async () => {
+                  setEditingBnb(false);
+                  setRejectData(bufferData)
+                  setData(bufferData)
+                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                {editingBnb && <Button height="35px" onClick={() => {setEditingBnb(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
+              </Flex> 
+
+              {/* LTC Address field */}
+              <Flex m="15px 0" align={"center"}>
+                <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>LTC:</Text>
+                {!editingLtc && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ltcAddress? data.ltcAddress : "Not set"}</Text>}
+                {editingLtc && <Input autoFocus onChange={e => handleEditData("ltcAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
+                {(!editingLtc && isOwner) && <GrEdit onClick={() => setEditingLtc(true)} fontSize={"16px"} cursor="pointer"/>}
+                {editingLtc && <Button mx={"4px"} height="35px" disabled={!bufferData?.ltcAddress?.length} onClick={async () => {
+                  setEditingLtc(false);
+                  setRejectData(bufferData)
+                  setData(bufferData)
+                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                {editingLtc && <Button height="35px" onClick={() => {setEditingLtc(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
+              </Flex>  
+
+              {/* SOL Address field */}
+              <Flex m="15px 0" align={"center"}>
+                <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>SOL:</Text>
+                {!editingSol && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.solanaAddress? data.solanaAddress : "Not set"}</Text>}
+                {editingSol && <Input autoFocus onChange={e => handleEditData("solanaAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
+                {(!editingSol && isOwner) && <GrEdit onClick={() => setEditingSol(true)} fontSize={"16px"} cursor="pointer"/>}
+                {editingSol && <Button mx={"4px"} height="35px" disabled={!bufferData?.solanaAddress?.length} onClick={async () => {
+                  setEditingSol(false);
+                  setRejectData(bufferData)
+                  setData(bufferData)
+                  await updateData(Object.values(bufferData))}}>Save</Button>}
+                {editingSol && <Button height="35px" onClick={() => {setEditingSol(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
+              </Flex>         
+
             </ModalBody> : 
             <Flex h="400px" direction={"column"} align={"center"}>
               <Spinner size={"xl"} w="2px" h="80px" speed=".5s" color="orange" thickness="80px"/>
