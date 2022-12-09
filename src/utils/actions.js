@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-export const set = async (contract, name, tld) => {
+export const set = async (contract, name, tld, account) => {
     if (!name || !tld || !contract) {
         alert("Either one of name, tld, or contract is invalid")
         return;
@@ -11,7 +11,7 @@ export const set = async (contract, name, tld) => {
     }
     const cost = name.length === 2? '.1': name.length === 3? '0.05' : name.length === 4? '0.03': '0.01'
     try {
-        let tx = await contract.setName(name, tld, {value: ethers.utils.parseEther(cost) })
+        let tx = await contract.setName(name, tld, account, {value: ethers.utils.parseEther(cost) })
         tx = await tx.wait()
         return tx;
     } catch(e) {

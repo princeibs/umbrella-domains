@@ -142,7 +142,7 @@ function App() {
       const provider = new ethers.providers.Web3Provider(ethereum)
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);            
-      const tx = await set(contract, domain, tld);
+      const tx = await set(contract, domain, tld, account);
       showToast(`Successfully claimed '${domain}.${tld}' on the blockchain`)
       loadNames()
       console.log("tx: ", tx)
@@ -169,7 +169,7 @@ function App() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
       const tx = await contract.getNames();
-      // console.log("names: ", tx)
+      console.log("names: ", tx)
       setNames(tx)
     } 
   }

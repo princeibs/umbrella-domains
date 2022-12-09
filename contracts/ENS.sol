@@ -69,7 +69,7 @@ contract ENS is ERC721URIStorage {
         return StringUtils.strlen(name) >= 2 && StringUtils.strlen(name) <= 32;
     }
 
-    function setName(string calldata _name, string calldata _tld) external payable {
+    function setName(string calldata _name, string calldata _tld, string calldata ethAddress) external payable {
         uint nameCost = cost(_name);   
         if (!validName(_name)) revert InvalidName(_name);
         if (msg.value < nameCost) revert InvalidFunds(nameCost, msg.value);
@@ -101,10 +101,12 @@ contract ENS is ERC721URIStorage {
         nameToIds[domain] = tokenId;
         tldCount[_tld]++;
 
-        emit RegisterName(string.concat(_name, ".", _tld), msg.sender);
+        string[5] memory dd = [ethAddress, "", "", "", ""];
+        setData(_name, _tld, dd);
+        emit RegisterName(string.concat(_name, ".", _tld), msg.sender);        
     }
 
-    function setData(string calldata _name, string calldata _tld, string[] calldata _data) external {
+    function setData(string calldata _name, string calldata _tld, string[5] memory _data) public {
         if (register[_tld][_name] != msg.sender) revert Unauthorized();
         string memory name = string.concat(_name, ".", _tld);
         data[name].ethAddress = _data[0];
