@@ -139,13 +139,20 @@ function App() {
   const mintName = async () => {
     const {ethereum} = window;
     if (ethereum) {
+      setLoading(true)
       const provider = new ethers.providers.Web3Provider(ethereum)
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);            
       const tx = await set(contract, domain, tld, account);
-      showToast(`Successfully claimed '${domain}.${tld}' on the blockchain`)
-      loadNames()
-      console.log("tx: ", tx)
+      if (tx.status === 1) showToast(`Successfully claimed '${domain}.${tld}' on the blockchain`)
+      setTimeout(async () => {
+        await loadNames();
+      }, 3000); 
+      setTimeout(() => {
+        nameStatus()
+      }, 2000);     
+      // console.log("tx: ", tx)
+      setLoading(false)      
     }    
   }
 
@@ -169,7 +176,7 @@ function App() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
       const tx = await contract.getNames();
-      console.log("names: ", tx)
+      // console.log("names: ", tx)
       setNames(tx)
     } 
   }
@@ -290,7 +297,7 @@ function App() {
               <Text color={'red'} bgColor="gray.300" borderRadius="5px" mr={"5px"} fontFamily={"Source Code Pro, monospace"} p="1px 5px" display="inline">{domain+"."+tld}</Text>
               is already taken</Text>}                           
             </Flex>
-            {nameAvailable && <Button disabled={domain.length<2} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
+            {nameAvailable && <Button isLoading={loading} loadingText="Minting domain ..." disabled={domain.length<2 || loading} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
             {!nameAvailable && <ViewModal domain={domain} tld={tld} text="view" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account} toast={showToast}/>}            
           </Flex>
         </Flex>
