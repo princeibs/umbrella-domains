@@ -15,21 +15,23 @@ import {
 } from "@chakra-ui/react"
 import React, {useState} from "react"
 import {GrEdit} from "react-icons/gr"
+import axios from "axios"
+
+const OverlayOne = () => (
+  <ModalOverlay
+    // bg='blackAlpha.100'
+    backdropFilter='blur(10px)'
+  />
+)
 
 function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, domainOwner, account}) {
-    const OverlayOne = () => (
-      <ModalOverlay
-        bg='blackAlpha.300'
-        backdropFilter='blur(10px) hue-rotate(90deg)'
-      />
-    )
-  
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [overlay, setOverlay] = useState(<OverlayOne />)
     const [data, setData] = useState(null) // 
     const [bufferData, setBufferData] = useState(null) // data state while editing
     const [rejectData, setRejectData] = useState({}) // restore data back when operation is canceled
     const [isOwner, setIsOwner] = useState(false)
+    const [tokenData, setTokenData] = useState(null)
 
     const [editing, setEditing] = useState(false)
     const [editingBtc, setEditingBtc] = useState(false)
@@ -47,6 +49,13 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
       }
     }
 
+    const fetchMetadata = async (uri) => {
+      try {
+        const metadata = await axios.get(uri)
+        return metadata;
+      } catch(e) {console.log(e)}
+    }
+
     const handleEditData = (key, e) => {
       setBufferData({ 
         ...data,
@@ -58,13 +67,14 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
       <>
         <Button   
           onClick={async () => {
-          const ddata = await getDomain(`${domain}.${tld}`)   
-          const sdata = structureData(ddata);    
-          setData(sdata);
-          setRejectData(sdata)
-          // console.log("data: ", data)
+          const {data: ddata, tokenUri} = await getDomain(`${domain}.${tld}`)   
+          const sdata = structureData(ddata);              
           const owner = await domainOwner(domain, tld)
           const _isOwner = owner.toLowerCase() === account.toLowerCase()
+          const metadata = await fetchMetadata(tokenUri)
+          setTokenData(metadata);        
+          setData(sdata);
+          setRejectData(sdata)
           setIsOwner(_isOwner);
           setOverlay(<OverlayOne />)          
           onOpen()
@@ -77,8 +87,8 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
             {data !== null && !loading ? 
             <ModalBody>                
               <Flex my="25px" direction={"column"} align="center">
-                <Image src="https://picsum.photos/seed/picsum/200/300" height={"300px"} width="300px" borderRadius={"10px"}/>
-                <Text mt="10px" fontSize={"15px"} fontWeight="700">{`${domain}.${tld}`}</Text>
+                <Image src={tokenData.data.image} height={"300px"} width="300px" borderRadius={"10px"}/>
+                <Text mt="10px" fontSize={"15px"} fontWeight="700">{tokenData.data.description}</Text>
               </Flex>
 
               {/* ETH Address field */}

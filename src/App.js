@@ -167,8 +167,24 @@ function App() {
       const provider = new ethers.providers.Web3Provider(ethereum)
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
-      const tx = await contract.data(domainName);
+      const data = await contract.data(domainName);
+      const tokenUri = await contract.getTokenUri(domainName);
 
+      setLoading(false)      
+      return {data, tokenUri};
+    } 
+  }
+
+  const fetchTokenUri = async (domainName) => {
+    const {ethereum} = window;
+    if (ethereum) {
+      setLoading(true)
+      const provider = new ethers.providers.Web3Provider(ethereum)
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
+      const tx = await contract.getTokenUri(domainName);
+
+      console.log("tokenUri: ", tx)
       setLoading(false)      
       return tx;
     } 
