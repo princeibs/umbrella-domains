@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/umbrella-domains/static/css/main.2eee401c.css",
+    "main.js": "/umbrella-domains/static/js/main.5bc4bd9b.js",
+    "static/js/787.1edd1e9d.chunk.js": "/umbrella-domains/static/js/787.1edd1e9d.chunk.js",
+    "index.html": "/umbrella-domains/index.html",
+    "main.2eee401c.css.map": "/umbrella-domains/static/css/main.2eee401c.css.map",
+    "main.5bc4bd9b.js.map": "/umbrella-domains/static/js/main.5bc4bd9b.js.map",
+    "787.1edd1e9d.chunk.js.map": "/umbrella-domains/static/js/787.1edd1e9d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2eee401c.css",
+    "static/js/main.5bc4bd9b.js"
+  ]
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.2eee401c.css","mappings":"+IAEA,EACI,gCACJ","sources":["index.css"],"sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Diplomata+SC&family=La+Belle+Aurore&family=Quicksand&family=Source+Code+Pro&display=swap');\n\n* {\n    font-family: 'Quicksand', sans-serif;\n}"],"names":[],"sourceRoot":""}
