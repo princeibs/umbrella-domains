@@ -309,7 +309,10 @@ function App() {
                 is available</Text>}
               {(!nameAvailable && domain.length > 1) && <Text color={"red"} mt="5px">
               <Text color={'red'} bgColor="gray.300" borderRadius="5px" mr={"5px"} fontFamily={"Source Code Pro, monospace"} p="1px 5px" display="inline">{domain+"."+tld}</Text>
-              is already taken</Text>}                           
+              is already taken</Text>}    
+              {(nameAvailable && domain.length > 1) && <Text color="yellow.800">Cost: {" "}
+                <Text display={"inline"} fontFamily={"Source Code Pro, monospace"}>{domain.length === 2? "0.1" : domain.length === 3? "0.05" : domain.length === 4? "0.03" : "0.01"} MATIC</Text>
+              </Text>}                       
             </Flex>
             {nameAvailable && <Button isLoading={loading} loadingText="Minting domain ..." disabled={domain.length<2 || loading} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
             {!nameAvailable && <ViewModal domain={domain} tld={tld} text="view" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account} toast={showToast}/>}            
