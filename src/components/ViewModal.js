@@ -12,7 +12,8 @@ import {
     Image,
     Input,
     Spinner,
-    Box
+    Box,
+    Link
 } from "@chakra-ui/react"
 import React, {useState} from "react"
 import {GrEdit} from "react-icons/gr"
@@ -105,7 +106,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* ETH Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>ETH:</Text>
-                {!editing && <Text letterSpacing={"1px"} fontSize={"15px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ethAddress? data.ethAddress : "Not set"}</Text>}
+                {!editing && <Text letterSpacing={"1px"} fontSize={"15px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ethAddress? <Link  href={`https://etherscan.io/address/${data.ethAddress}`}>{data.ethAddress}</Link> : "Not set"}</Text>}
                 {editing && <Input autoFocus onChange={e => handleEditData("ethAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
                 {(!editing && isOwner) && <GrEdit onClick={() => setEditing(true)} fontSize={"13px"} cursor="pointer"/>} <Box w="6px"/>
                 {(!editing && data.ethAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.ethAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
@@ -121,7 +122,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* BTC Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>BTC:</Text>
-                {!editingBtc && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.btcAddress? data.btcAddress : "Not set"}</Text>}
+                {!editingBtc && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.btcAddress? <Link  href={`https://blockchair.com/bitcoin/address/${data.btcAddress}`}>{data.btcAddress}</Link> : "Not set"}</Text>}
                 {editingBtc && <Input autoFocus onChange={e => handleEditData("btcAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
                 {(!editingBtc && isOwner) && <GrEdit onClick={() => setEditingBtc(true)} fontSize={"16px"} cursor="pointer"/>} <Box w={"6px"}/>
                 {(!editingBtc && data.btcAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.btcAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
@@ -137,7 +138,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* BNB Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>BNB:</Text>
-                {!editingBnb && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.bnbAddress? data.bnbAddress : "Not set"}</Text>}
+                {!editingBnb && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.bnbAddress? <Link  href={`https://bscscan.com/address/${data.bnbAddress}`}>{data.bnbAddress}</Link> : "Not set"}</Text>}
                 {editingBnb && <Input autoFocus onChange={e => handleEditData("bnbAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
                 {(!editingBnb && isOwner) && <GrEdit onClick={() => setEditingBnb(true)} fontSize={"16px"} cursor="pointer"/>} <Box w="6px"/>
                 {(!editingBnb && data.bnbAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.bnbAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
@@ -153,7 +154,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* LTC Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>LTC:</Text>
-                {!editingLtc && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ltcAddress? data.ltcAddress : "Not set"}</Text>}
+                {!editingLtc && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ltcAddress? <Link  href={`https://blockchair.com/litecoin/address/${data.ltcAddress}`}>{data.ltcAddress}</Link> : "Not set"}</Text>}
                 {editingLtc && <Input autoFocus onChange={e => handleEditData("ltcAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
                 {(!editingLtc && isOwner) && <GrEdit onClick={() => setEditingLtc(true)} fontSize={"16px"} cursor="pointer"/>} <Box w="6px"/>
                 {(!editingLtc && data.ltcAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.ltcAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
@@ -169,7 +170,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* SOL Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>SOL:</Text>
-                {!editingSol && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.solanaAddress? data.solanaAddress : "Not set"}</Text>}
+                {!editingSol && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.solanaAddress? <Link  href={`https://solscan.io/account/${data.solanaAddress}`}>{data.solanaAddress}</Link> : "Not set"}</Text>}
                 {editingSol && <Input autoFocus onChange={e => handleEditData("solanaAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
                 {(!editingSol && isOwner) && <GrEdit onClick={() => setEditingSol(true)} fontSize={"16px"} cursor="pointer"/>} <Box w="6px"/>
                 {(!editingSol && data.solanaAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.solanaAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
