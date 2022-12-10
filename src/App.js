@@ -20,7 +20,6 @@ import { set, update } from './utils/actions';
 import ADDRESS from "./contracts/ENS-address.json";
 import ABI from "./contracts/ENS.json";
 import HelpModal from './components/HelpModal';
-import MyDomain from './components/MyDomain';
 import ViewModal from './components/ViewModal';
 
 
@@ -68,6 +67,7 @@ function App() {
     });
   }
 
+  // Switch Metamask wallet to Mumbai testnet
   const switchNetwork = async () => {
 		if (window.ethereum) {
 			try {
@@ -105,6 +105,7 @@ function App() {
 		}
 	}
 
+  // Connect Metamask to dapp
   const connectWallet = async () => {
     try {
       const {ethereum} = window;
@@ -120,6 +121,7 @@ function App() {
     }
   }
 
+  // Check if Metamask is already connected and set as account
   const checkWalletStatus = async () => {
     const {ethereum} = window;
     if (!ethereum) {
@@ -140,6 +142,7 @@ function App() {
     }
   }
 
+  // Mint domain name
   const mintName = async () => {
     const {ethereum} = window;
     if (ethereum) {
@@ -170,6 +173,7 @@ function App() {
     }    
   }
 
+  // Update domain name data
   const updateData = async (data) => {
     const {ethereum} = window;
     if (ethereum) {
@@ -183,6 +187,7 @@ function App() {
     } 
   }
 
+  // Fetch all minted names from blockchain
   const loadNames = async () => {
     const {ethereum} = window;
     if (ethereum) {      
@@ -195,6 +200,7 @@ function App() {
     } 
   }
 
+  // Fetch domain name data
   // name + tld = domainName
   const getDomain = async (domainName) => {
     const {ethereum} = window;
@@ -213,6 +219,7 @@ function App() {
     } 
   }
 
+  // Check wallet address domain name belongs to
   const domainOwner = async (name, tld) => {
     const {ethereum} = window;
     if (ethereum) {
@@ -227,6 +234,7 @@ function App() {
     }
   }
 
+  // Confirm if domain name is still available
   const nameStatus = () => {
     const domainName = domain + "." + tld;    
     if (names.includes(domainName)) {
@@ -250,18 +258,14 @@ function App() {
     nameStatus();
   }, [domain, tld]);
 
-  // useEffect(() => {
-
-  // })
-
 
   return (
     <ChakraProvider theme={theme}> 
+      {/* Wrong network warning */}
       <Flex direction={"column"} align="center" w="100vw" minH="100vh" position={"relative"}>
         <Box position="absolute" zIndex={"-10"} w="100%" h="100vh" bgColor={"springgreen"} borderTopRightRadius="0%" borderBottomRightRadius={"450%"}/>
         {MUMBAI_CHAIN_ID !== chainId && <Box w="100%" h="50px" bgColor={"orange"} textAlign="center" pt="10px">You are not connected to the right network. In order to continue, please switch to the <Link onClick={switchNetwork} display="inline" textDecor={"underline"}>right network</Link></Box>}
-        {/* Navigation */}        
-        
+        {/* Navigation */}          
         <Flex justify="space-around" align="center" w="100%" height="120px" p="40px 40px">  
           <Flex h="100px" w="100px">
             <Text fontFamily={"Diplomata SC, cursive"} fontSize="50px">UD</Text>

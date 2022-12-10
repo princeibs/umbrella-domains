@@ -33,7 +33,7 @@ const OverlayOne = () => (
 function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, domainOwner, account, toast}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [overlay, setOverlay] = useState(<OverlayOne />)
-    const [data, setData] = useState(null) // 
+    const [data, setData] = useState(null) // Initial data state after completed loading
     const [bufferData, setBufferData] = useState(null) // data state while editing
     const [rejectData, setRejectData] = useState({}) // restore data back when operation is canceled
     const [isOwner, setIsOwner] = useState(false)
@@ -45,7 +45,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
     const [editingBnb, setEditingBnb] = useState(false)
     const [editingLtc, setEditingLtc] = useState(false)
     const [editingSol, setEditingSol] = useState(false)
-
+    
     const copyTextToClipboard = async (text) => {
       if ('clipboard' in navigator) {
         await navigator.clipboard.writeText(text)
@@ -87,7 +87,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
           const owner = await domainOwner(domain, tld)
           const _isOwner = owner.toLowerCase() === account.toLowerCase()
           const metadata = await fetchMetadata(tokenUri)
-          
+
           setTokenData(metadata);        
           setData(sdata);
           setRejectData(sdata)
