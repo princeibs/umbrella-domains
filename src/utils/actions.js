@@ -16,6 +16,7 @@ export const set = async (contract, name, tld, account) => {
         return tx;
     } catch(e) {
         console.log(e)
+        return e;
     }    
 }
 

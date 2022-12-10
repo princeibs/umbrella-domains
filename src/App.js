@@ -53,12 +53,16 @@ function App() {
 
   const toast = useToast();
 
-  function showToast(message) {
+  function showToast(message, status, duration=5000) {
     toast({
       position: "top-right",
+      duration: duration,
       render: () => (
-        <Box bgColor={"green.700"} color="white" p="10px" borderRadius={"5px"} fontWeight="600" borderColor={"orange"} borderWidth="2px" minHeight={"100px"} w="350px">
-          {message}
+        <Box bgColor={status==="success"?"green.700": status==="error"? "red.300": "orange"} color="white" p="10px" borderRadius={"5px"} fontWeight="600" borderColor={"orange"} borderWidth="2px" minHeight={"100px"} w="350px">
+          <div
+            className="content"
+            dangerouslySetInnerHTML={{ __html: message }}
+        />
         </Box>
       )
     });
@@ -144,13 +148,23 @@ function App() {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);            
       const tx = await set(contract, domain, tld, account);
-      if (tx.status === 1) showToast(`Successfully claimed '${domain}.${tld}' on the blockchain`)
+      if (tx?.status === 1){ 
+        showToast("Clear the search box and re-enter your domain name again to view it", "warning", 15000)
+        showToast(`Successfully claimed '${domain}.${tld}' on the blockchain`, "success")
+      } else if (tx?.data?.code === -32000) {
+        showToast("An error has occured. Please make sure you have enough funds in your wallet before proceeding", "error")
+        setLoading(false)
+        return
+      } else {
+        showToast("An error has occured. Please ensure that <br/><br/>1. The name you are claiming is available. <br/>2. You have enough funds to mint the name. <br/>3. You are on the right network. <br/><br/>Otherwise try again letter. There might be a conjestion on the network at the moment.", "error", 15000);
+        setLoading(false)
+        return;
+      }
+
       setTimeout(async () => {
         await loadNames();
-      }, 3000); 
-      setTimeout(() => {
         nameStatus()
-      }, 2000);     
+      }, 3000);       
       // console.log("tx: ", tx)
       setLoading(false)      
     }    
@@ -193,7 +207,7 @@ function App() {
       const tokenUri = await contract.getTokenUri(domainName);
 
       setLoading(false)    
-      // showToast("Fetch details successful")  
+      // showToast("Fetch details successful", "success")  
       return {data, tokenUri};
     } 
   }
@@ -251,8 +265,8 @@ function App() {
           <Flex h="100px" w="100px">
             <Text fontFamily={"Diplomata SC, cursive"} fontSize="50px">UD</Text>
           </Flex>            
-          <Flex justify={"space-around"} align="center" w="700px" h="80px">            
-            <MyDomain />
+          <Flex justify={"flex-end"} gap="50px" align="center" w="700px" h="80px">            
+            {/* <MyDomain /> */}
             <HelpModal/>
             {!account && <Button leftIcon={<FaWallet/>} onClick={connectWallet}>Connect</Button>}
             {account && <Button color={"white"} backgroundColor="green" leftIcon={<FaWallet/>}>{account.slice(0, 5)}...{account.slice(-4)}</Button>}          
@@ -264,7 +278,7 @@ function App() {
           {/* Header */}
           <Flex direction={"column"} p="20px" w="55%" h="650px" bgColor={"white"} borderBottomRightRadius="0%" borderRadius={"20px"}>
             <Flex direction={"column"} mt="80px" w="100%" backgroundColor={"yellow"}>
-              <Text fontSize={"250px"} letterSpacing="-15px" fontFamily="'La Belle Aurore', cursive" backgroundColor={"orange"} lineHeight="70px">Umbrella</Text>            
+              <Text fontSize={"180px"} letterSpacing="-15px" backgroundColor={"orange"} lineHeight="70px">Umbrella</Text>            
               <Text textAlign={"right"} fontSize="40px" backgroundColor={"gray"} color="white" lineHeight="40px">domains</Text>
             </Flex>
             <Text fontSize={"30px"} mt="60px" textAlign={"center"}>
