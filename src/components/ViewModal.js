@@ -11,10 +11,12 @@ import {
     Flex,
     Image,
     Input,
-    Spinner
+    Spinner,
+    Box
 } from "@chakra-ui/react"
 import React, {useState} from "react"
 import {GrEdit} from "react-icons/gr"
+import {FaRegCopy} from "react-icons/fa"
 import axios from "axios"
 
 const OverlayOne = () => (
@@ -23,6 +25,7 @@ const OverlayOne = () => (
     backdropFilter='blur(10px)'
   />
 )
+
 
 function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, domainOwner, account, toast}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -38,6 +41,14 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
     const [editingBnb, setEditingBnb] = useState(false)
     const [editingLtc, setEditingLtc] = useState(false)
     const [editingSol, setEditingSol] = useState(false)
+
+    const copyTextToClipboard = async (text) => {
+      if ('clipboard' in navigator) {
+        await navigator.clipboard.writeText(text)
+      } else {
+        document.execCommand('copy', true, text);
+      }
+    }
 
     const structureData = (data) => {
       if (data) return {
@@ -94,9 +105,10 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* ETH Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>ETH:</Text>
-                {!editing && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ethAddress? data.ethAddress : "Not set"}</Text>}
+                {!editing && <Text letterSpacing={"1px"} fontSize={"15px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ethAddress? data.ethAddress : "Not set"}</Text>}
                 {editing && <Input autoFocus onChange={e => handleEditData("ethAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
-                {(!editing && isOwner) && <GrEdit onClick={() => setEditing(true)} fontSize={"16px"} cursor="pointer"/>}
+                {(!editing && isOwner) && <GrEdit onClick={() => setEditing(true)} fontSize={"13px"} cursor="pointer"/>} <Box w="6px"/>
+                {(!editing && data.ethAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.ethAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
                 {editing && <Button mx={"4px"} height="35px" disabled={!bufferData?.ethAddress?.length} onClick={async () => {
                   setEditing(false);
                   setRejectData(bufferData)
@@ -109,9 +121,10 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* BTC Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>BTC:</Text>
-                {!editingBtc && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.btcAddress? data.btcAddress : "Not set"}</Text>}
+                {!editingBtc && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.btcAddress? data.btcAddress : "Not set"}</Text>}
                 {editingBtc && <Input autoFocus onChange={e => handleEditData("btcAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
-                {(!editingBtc && isOwner) && <GrEdit onClick={() => setEditingBtc(true)} fontSize={"16px"} cursor="pointer"/>}
+                {(!editingBtc && isOwner) && <GrEdit onClick={() => setEditingBtc(true)} fontSize={"16px"} cursor="pointer"/>} <Box w={"6px"}/>
+                {(!editing && data.btcAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.btcAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
                 {editingBtc && <Button mx={"4px"} height="35px" disabled={!bufferData?.btcAddress?.length} onClick={async () => {
                   setEditingBtc(false);
                   setRejectData(bufferData)
@@ -124,9 +137,10 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* BNB Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>BNB:</Text>
-                {!editingBnb && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.bnbAddress? data.bnbAddress : "Not set"}</Text>}
+                {!editingBnb && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.bnbAddress? data.bnbAddress : "Not set"}</Text>}
                 {editingBnb && <Input autoFocus onChange={e => handleEditData("bnbAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
-                {(!editingBnb && isOwner) && <GrEdit onClick={() => setEditingBnb(true)} fontSize={"16px"} cursor="pointer"/>}
+                {(!editingBnb && isOwner) && <GrEdit onClick={() => setEditingBnb(true)} fontSize={"16px"} cursor="pointer"/>} <Box w="6px"/>
+                {(!editing && data.bnb) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.bnbAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
                 {editingBnb && <Button mx={"4px"} height="35px" disabled={!bufferData?.bnbAddress?.length} onClick={async () => {
                   setEditingBnb(false);
                   setRejectData(bufferData)
@@ -139,9 +153,10 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* LTC Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>LTC:</Text>
-                {!editingLtc && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ltcAddress? data.ltcAddress : "Not set"}</Text>}
+                {!editingLtc && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.ltcAddress? data.ltcAddress : "Not set"}</Text>}
                 {editingLtc && <Input autoFocus onChange={e => handleEditData("ltcAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
-                {(!editingLtc && isOwner) && <GrEdit onClick={() => setEditingLtc(true)} fontSize={"16px"} cursor="pointer"/>}
+                {(!editingLtc && isOwner) && <GrEdit onClick={() => setEditingLtc(true)} fontSize={"16px"} cursor="pointer"/>} <Box w="6px"/>
+                {(!editing && data.ltcAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.ltcAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
                 {editingLtc && <Button mx={"4px"} height="35px" disabled={!bufferData?.ltcAddress?.length} onClick={async () => {
                   setEditingLtc(false);
                   setRejectData(bufferData)
@@ -154,9 +169,10 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
               {/* SOL Address field */}
               <Flex m="15px 0" align={"center"}>
                 <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>SOL:</Text>
-                {!editingSol && <Text letterSpacing={"1px"} fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.solanaAddress? data.solanaAddress : "Not set"}</Text>}
+                {!editingSol && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.solanaAddress? data.solanaAddress : "Not set"}</Text>}
                 {editingSol && <Input autoFocus onChange={e => handleEditData("solanaAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
-                {(!editingSol && isOwner) && <GrEdit onClick={() => setEditingSol(true)} fontSize={"16px"} cursor="pointer"/>}
+                {(!editingSol && isOwner) && <GrEdit onClick={() => setEditingSol(true)} fontSize={"16px"} cursor="pointer"/>} <Box w="6px"/>
+                {(!editing && data.solanaAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.solanaAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
                 {editingSol && <Button mx={"4px"} height="35px" disabled={!bufferData?.solanaAddress?.length} onClick={async () => {
                   setEditingSol(false);
                   setRejectData(bufferData)

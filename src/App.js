@@ -58,7 +58,7 @@ function App() {
       position: "top-right",
       duration: duration,
       render: () => (
-        <Box bgColor={status==="success"?"green.700": status==="error"? "red.300": "orange"} color="white" p="10px" borderRadius={"5px"} fontWeight="600" borderColor={"orange"} borderWidth="2px" minHeight={"100px"} w="350px">
+        <Box bgColor={status==="success"?"green.700": status==="error"? "red.300": "orange"} color="white" p="10px" borderRadius={"5px"} fontWeight="600" borderColor={"orange"} borderWidth="2px" minHeight={"70px"} w="350px">
           <div
             className="content"
             dangerouslySetInnerHTML={{ __html: message }}
@@ -156,7 +156,7 @@ function App() {
         setLoading(false)
         return
       } else {
-        showToast("An error has occured. Please ensure that <br/><br/>1. The name you are claiming is available. <br/>2. You have enough funds to mint the name. <br/>3. You are on the right network. <br/><br/>Otherwise try again letter. There might be a conjestion on the network at the moment.", "error", 15000);
+        showToast("An error has occured. Please ensure that <br/><br/>1. The name you are claiming is available. <br/>2. You have enough funds to mint the name. <br/>3. You are on the right network. <br/>4. You did not reject the transaction from Metamask <br/><br/>Otherwise try again letter. There might be a conjestion on the network at the moment.", "error", 15000);
         setLoading(false)
         return;
       }
