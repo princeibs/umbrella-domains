@@ -289,7 +289,7 @@ function App() {
             <Text textAlign={"center"} fontSize={"25px"} mt="30px">No renewal fees!</Text>         
             <Text textAlign={"center"} fontSize="25px">Forever yours!</Text>
           </Flex>
-          <Flex w="50%" align={"center"} justify="center" direction={"column"}>
+          {account ? <Flex w="50%" align={"center"} justify="center" direction={"column"}>
             {/* <InputArea/> */}
             <Flex direction={"column"}>
               <Text fontSize={"25px"} mb="10px">Search or create domain names here</Text>
@@ -316,7 +316,8 @@ function App() {
             </Flex>
             {nameAvailable && <Button isLoading={loading} loadingText="Minting domain ..." disabled={domain.length<2 || loading} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
             {!nameAvailable && <ViewModal domain={domain} tld={tld} text="view" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account} toast={showToast}/>}            
-          </Flex>
+          </Flex>: 
+          <Flex w="50%" align={"center"} justify="center">Please connect wallet to continue</Flex>}          
         </Flex>
       </Flex>
     </ChakraProvider>

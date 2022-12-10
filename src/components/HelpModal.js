@@ -7,7 +7,8 @@ import {
     ModalContent,
     Modal,
     ModalCloseButton,
-    useDisclosure,    
+    useDisclosure,
+    Link,    
 } from "@chakra-ui/react"
 import React from "react"
 import {FiHelpCircle} from "react-icons/fi"
@@ -31,7 +32,7 @@ function HelpModal() {
             <ModalHeader>Help</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              Lorem ipsum
+              Please visit <Link href="https://github.com/princeibs/umbrella-domains">https://github.com/princeibs/umbrella-domains</Link> to learn more about this app
             </ModalBody>
             <ModalFooter>
               <Button onClick={onClose}>Close</Button>
