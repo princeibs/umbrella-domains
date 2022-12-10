@@ -18,7 +18,9 @@ import {
 import React, {useState} from "react"
 import {GrEdit} from "react-icons/gr"
 import {FaRegCopy} from "react-icons/fa"
+import {BiLinkExternal} from "react-icons/bi"
 import axios from "axios"
+import contractAddress from "../contracts/ENS-address.json"
 
 const OverlayOne = () => (
   <ModalOverlay
@@ -36,6 +38,7 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
     const [rejectData, setRejectData] = useState({}) // restore data back when operation is canceled
     const [isOwner, setIsOwner] = useState(false)
     const [tokenData, setTokenData] = useState(null)
+    const [domainId, setDomainId] = useState(null)
 
     const [editing, setEditing] = useState(false)
     const [editingBtc, setEditingBtc] = useState(false)
@@ -79,14 +82,16 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
       <>
         <Button   
           onClick={async () => {
-          const {data: ddata, tokenUri} = await getDomain(`${domain}.${tld}`)   
+          const {data: ddata, tokenUri, domainId} = await getDomain(`${domain}.${tld}`)   
           const sdata = structureData(ddata);              
           const owner = await domainOwner(domain, tld)
           const _isOwner = owner.toLowerCase() === account.toLowerCase()
           const metadata = await fetchMetadata(tokenUri)
+          
           setTokenData(metadata);        
           setData(sdata);
           setRejectData(sdata)
+          setDomainId(domainId);
           setIsOwner(_isOwner);
           setOverlay(<OverlayOne />)          
           onOpen()
@@ -94,11 +99,12 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
         <Modal size={"xl"} isOpen={isOpen} onClose={onClose} closeOnOverlayClick={!loading} >
           {overlay}
           <ModalContent>
-            <ModalHeader textAlign={"center"} fontSize="40px">{`${domain}.${tld}`}</ModalHeader> 
+            <ModalHeader textAlign={"center"} fontSize="40px">{`${domain}.${tld}`}</ModalHeader>       
                        
             {data !== null && !loading ? 
             <ModalBody>                
-              <Flex my="25px" direction={"column"} align="center">
+              <Flex mb="40px" direction={"column"} align="center">
+                <Link position={"inline"} href={`https://testnets.opensea.io/assets/mumbai/${contractAddress.ENS}/${domainId}`}><Flex align={"center"}><Text mr={"3px"}>View on Opensea </Text> <BiLinkExternal/></Flex></Link>
                 <Image src={tokenData.data.image} height={"300px"} width="300px" borderRadius={"10px"}/>
                 <Text mt="10px" fontSize={"15px"} fontWeight="700">{tokenData.data.description}</Text>
               </Flex>

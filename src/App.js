@@ -205,10 +205,11 @@ function App() {
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);      
       const data = await contract.data(domainName);
       const tokenUri = await contract.getTokenUri(domainName);
+      const domainId = await contract.nameToIds(domainName);
 
       setLoading(false)    
       // showToast("Fetch details successful", "success")  
-      return {data, tokenUri};
+      return {data, tokenUri, domainId};
     } 
   }
 
