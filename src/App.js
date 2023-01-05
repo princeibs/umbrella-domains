@@ -154,22 +154,17 @@ function App() {
       const contract = new ethers.Contract(ADDRESS.ENS, ABI.abi, signer);            
       const tx = await set(contract, domain, tld, account);
       if (tx?.status === 1){ 
-        showToast("Clear the search box and re-enter your domain name again to view it", "warning", 15000)
-        showToast(`Successfully claimed '${domain}.${tld}' on the blockchain`, "success")
+        setNameAvailable(false);
+        showToast(`Successfully claimed '${domain}.${tld}'`, "success")
       } else if (tx?.data?.code === -32000) {
         showToast("An error has occured. Please make sure you have enough funds in your wallet before proceeding", "error")
         setLoading(false)
         return
       } else {
-        showToast("An error has occured. Please ensure that <br/><br/>1. The name you are claiming is available. <br/>2. You have enough funds to mint the name. <br/>3. You are on the right network. <br/>4. You did not reject the transaction from Metamask <br/><br/>Otherwise try again letter. There might be a conjestion on the network at the moment.", "error", 15000);
+        showToast("An error has occured. Please ensure that <br/><br/>1. The name you are claiming is available. <br/>2. You have enough funds to mint the name. <br/>3. You are on the right network. <br/>4. You did not reject the transaction from Metamask <br/><br/>Otherwise try again letter. There might be a congestion on the network at the moment.", "error", 15000);
         setLoading(false)
         return;
-      }
-
-      setTimeout(async () => {
-        await loadNames();
-        nameStatus()
-      }, 3000);       
+      }       
       // console.log("tx: ", tx)
       setLoading(false)      
     }    
@@ -322,7 +317,7 @@ function App() {
               </Text>}                       
             </Flex>
             {nameAvailable && <Button isLoading={loading} loadingText="Minting domain ..." disabled={domain.length<2 || loading} leftIcon={<AiOutlineFire/>} mt={"40px"} w="250px" h="60px" fontSize={"20px"} onClick={mintName}>Mint</Button>}
-            {!nameAvailable && <ViewModal domain={domain} tld={tld} text="view" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account} toast={showToast}/>}            
+            {!nameAvailable && <ViewModal domain={domain} tld={tld} text="View" icon={<GrOverview/>} getDomain={getDomain} updateData={updateData} loading={loading} domainOwner={domainOwner} account={account} toast={showToast}/>}            
           </Flex>: 
           <Flex w="50%" align={"center"} justify="center">Please connect wallet to continue</Flex>}          
         </Flex>

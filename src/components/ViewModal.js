@@ -42,7 +42,6 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
 
     const [editing, setEditing] = useState(false)
     const [editingBtc, setEditingBtc] = useState(false)
-    const [editingBnb, setEditingBnb] = useState(false)
     const [editingLtc, setEditingLtc] = useState(false)
     const [editingSol, setEditingSol] = useState(false)
     
@@ -139,22 +138,6 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                   await updateData(Object.values(bufferData))
                   toast("Successfully updated Bitcoin (BTC) address", "success")}}>Save</Button>}
                 {editingBtc && <Button height="35px" onClick={() => {setEditingBtc(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
-              </Flex>    
-
-              {/* BNB Address field */}
-              <Flex m="15px 0" align={"center"}>
-                <Text fontSize={"16px"} fontWeight="700" opacity={".6"}>BNB:</Text>
-                {!editingBnb && <Text letterSpacing={"1px"} fontSize="15px" fontWeight={"700"} fontFamily={"Source Code Pro, monospace"} mx="15px">{data.bnbAddress? <Link  href={`https://bscscan.com/address/${data.bnbAddress}`}>{data.bnbAddress}</Link> : "Not set"}</Text>}
-                {editingBnb && <Input autoFocus onChange={e => handleEditData("bnbAddress", e)} w={"450px"} ml="10px" fontFamily={"Source Code Pro, monospace"} height="35px"/>}
-                {(!editingBnb && isOwner) && <GrEdit onClick={() => setEditingBnb(true)} fontSize={"16px"} cursor="pointer"/>} <Box w="6px"/>
-                {(!editingBnb && data.bnbAddress) && <FaRegCopy onClick={async () => await copyTextToClipboard(data.bnbAddress).then(()=> toast("Copy successful!", "success"))} fontSize={"13px"} cursor="pointer"/>}
-                {editingBnb && <Button mx={"4px"} height="35px" disabled={!bufferData?.bnbAddress?.length} onClick={async () => {
-                  setEditingBnb(false);
-                  setRejectData(bufferData)
-                  setData(bufferData)
-                  await updateData(Object.values(bufferData))
-                  toast("Successfully updated BNB address", "success")}}>Save</Button>}
-                {editingBnb && <Button height="35px" onClick={() => {setEditingBnb(false); setData(rejectData); setBufferData(null)}}>Cancel</Button>}
               </Flex> 
 
               {/* LTC Address field */}
@@ -201,7 +184,6 @@ function ViewModal({domain, tld, text, icon, loading, getDomain, updateData, dom
                 onClose(); 
                 setEditing(false)
                 setEditingBtc(false)
-                setEditingBnb(false)
                 setEditingLtc(false)
                 setEditingSol(false)
                   }}>Close</Button>
