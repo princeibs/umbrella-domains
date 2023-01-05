@@ -76,8 +76,46 @@ If you ever want to use your wallet address for simple task like receiving funds
 ![Screenshot][screenshot-1]
 2. Enter an already existing domain name to view domain data
 ![Screenshot][screenshot-2]
-3. Enter a unique domain name to mint new domain
+3. Click on the "View" button to view domain details
+![Screenshot][screenshot-4]
+4. Click on the pencil edit wallet address
+5. Click on the "copy" icon to copy wallet address
+6. Click on the link above domain image to view domain NFT on OpenSea
+![Screenshot][screenshot-5]
+7. Enter a unique domain name to mint new domain
 ![Screenshot][screenshot-3]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+To get a local copy up and running follow these simple example steps.
+
+### Prerequisites
+
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
+  
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/princeibs/umbrella-domains.git
+   ```
+   
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+
+3. Run dapp;
+   ```sh
+   npm start
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -104,9 +142,9 @@ Don't forget to give the project a star! Thanks again!
 <!-- CONTACT -->
 ## Contact
 
-[@prince_ibs](https://twitter.com/prince_ibs)
+Twitter - [@prince_ibs](https://twitter.com/prince_ibs)
 
-Project Link: [https://github.com/princeibs/umbrella-domains](https://github.com/princeibs/umbrella-domains)
+Project Link - [https://github.com/princeibs/umbrella-domains](https://github.com/princeibs/umbrella-domains)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -134,9 +172,11 @@ Project Link: [https://github.com/princeibs/umbrella-domains](https://github.com
 [issues-url]: https://github.com/princeibs/umbrella-domains/issues
 
 [screenshot-0]: screenshots/0-landing_page.png
-[screenshot-2]: screenshots/1-name_not_available.png
-[screenshot-3]: screenshots/2-name_is_available.png
-[screenshot-1]: screenshots/3-switch_network.png
+[screenshot-2]: screenshots/2-name_not_available.png
+[screenshot-3]: screenshots/3-name_is_available.png
+[screenshot-1]: screenshots/1-switch_network.png
+[screenshot-4]: screenshots/4-domain_details.png
+[screenshot-5]: screenshots/5-view_on_opensea.png
 
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
