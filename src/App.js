@@ -10,7 +10,8 @@ import {
   Link,
   Input,
   Select,
-  useToast
+  useToast,
+  Image
 } from '@chakra-ui/react';
 import {FaWallet} from "react-icons/fa"
 import {AiOutlineFire} from "react-icons/ai"
@@ -21,6 +22,7 @@ import ADDRESS from "./contracts/ENS-address.json";
 import ABI from "./contracts/ENS.json";
 import HelpModal from './components/HelpModal';
 import ViewModal from './components/ViewModal';
+import logo from "./asset/logo_w_name.png"
 
 
 const MUMBAI_CHAIN_ID = "0x13881";
@@ -267,8 +269,8 @@ function App() {
         {MUMBAI_CHAIN_ID !== chainId && <Box w="100%" h="50px" bgColor={"orange"} textAlign="center" pt="10px">You are not connected to the right network. In order to continue, please switch to the <Link onClick={switchNetwork} display="inline" textDecor={"underline"}>right network</Link></Box>}
         {/* Navigation */}          
         <Flex justify="space-around" align="center" w="100%" height="120px" p="40px 40px">  
-          <Flex h="100px" w="100px">
-            <Text fontFamily={"Diplomata SC, cursive"} fontSize="50px">UD</Text>
+          <Flex h="100px">
+            <Image src={logo} borderRadius="15px"/>
           </Flex>            
           <Flex justify={"flex-end"} gap="50px" align="center" w="700px" h="80px">            
             {/* <MyDomain /> */}

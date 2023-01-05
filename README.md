@@ -29,7 +29,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/princeibs/umbrella-domains">
-    <img src="screenshots/logo.png" alt="Logo" width="80" height="80">
+    <img src="src/asset/logo.png" alt="Logo" width="" height="100">
   </a>
 
   <h3 align="center">Umbrella Domains</h3>
